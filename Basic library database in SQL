@@ -1,0 +1,73 @@
+-- Table for books
+CREATE TABLE books (
+  id INTEGER PRIMARY KEY,
+  title TEXT NOT NULL,
+  author TEXT NOT NULL,
+  isbn TEXT NOT NULL,
+  publisher TEXT NOT NULL,
+  publication_date DATE NOT NULL,
+  category TEXT,
+  cover_image_url TEXT,
+  synopsis TEXT
+);
+
+-- Table for users
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  address TEXT,
+  phone_number TEXT
+);
+
+-- Table for borrowings
+CREATE TABLE borrowings (
+  id INTEGER PRIMARY KEY,
+  book_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  returned BOOLEAN DEFAULT false,
+  fine DECIMAL(5, 2) DEFAULT 0.00,
+  FOREIGN KEY (book_id) REFERENCES books(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Table for reservations
+CREATE TABLE reservations (
+  id INTEGER PRIMARY KEY,
+  book_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  reservation_date DATE NOT NULL,
+  FOREIGN KEY (book_id) REFERENCES books(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Insert sample data for books
+INSERT INTO books (id, title, author, isbn, publisher, publication_date, category, cover_image_url, synopsis)
+VALUES
+  (1, 'To Kill a Mockingbird', 'Harper Lee', '9780446310789', 'Grand Central Publishing', '1960-07-11', 'Classic Literature', 'https://www.example.com/covers/to-kill-a-mockingbird.jpg', 'The story of young Scout Finch and her experiences growing up in a racially-divided town in Alabama.'),
+  (2, '1984', 'George Orwell', '9780451524935', 'Signet Classics', '1949-06-08', 'Dystopian Fiction', 'https://www.example.com/covers/1984.jpg', 'A chilling look at a totalitarian society in which individuality and free thought are forbidden.'),
+  (3, 'The Lord of the Rings', 'J.R.R. Tolkien', '9780618640157', 'Houghton Mifflin', '1954-07-29', 'Fantasy', 'https://www.example.com/covers/the-lord-of-the-rings.jpg', 'A classic tale of adventure and heroism set in a magical world of wizards, elves, and dwarves.'),
+  (4, 'Pride and Prejudice', 'Jane Austen', '9780486284736', 'Dover Publications', '1813-01-28', 'Romantic Fiction', 'https://www.example.com/covers/pride-and-prejudice.jpg', 'A romantic novel that explores themes of class, wealth, and social status in 19th-century England.');
+
+-- Insert sample data for users
+INSERT INTO users (id, name, email, password, address, phone_number)
+VALUES
+  (1, 'Alice Smith', 'alice@example.com', 'password', '123 Main St, Anytown USA', '555-1234'),
+  (2, 'Bob Johnson', 'bob@example.com', 'password', '456 Elm St, Anytown USA', '555-5678'),
+  (3, 'Charlie Brown', 'charlie@example.com', 'password', '789 Maple St, Anytown USA', '555-9012');
+
+-- Insert sample data for borrowings
+INSERT INTO borrowings (id, book_id, user_id, start_date, end_date, returned, fine)
+VALUES
+  (1, 1, 1, '2022-01-01', '2022-02-01', true, 0),
+  (2, 2, 2, '2022-01-02', '2022-03-02', false, 0),
+  (3, 3, 3, '2022-01-03', '2022-02-03', false, 0);
+
+-- Insert sample data for reservations
+INSERT INTO reservations (id, book_id, user_id, reservation_date)
+VALUES
+  (1, 2, 1, '2022-02-01'),
+  (2, 2, 2, '2022-02-15');
